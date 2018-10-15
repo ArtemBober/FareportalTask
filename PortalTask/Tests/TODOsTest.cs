@@ -23,10 +23,8 @@ namespace PortalTask.Tests
             int? completedNumberUser1 = null;
             int? completedNumberUser2 = null;
 
-            var client = new HttpClient { BaseAddress = new Uri(BaseUlr) };
-
             //getting the "todosUserId1' that corresponds to 'id' in Users request
-            HttpResponseMessage responseUsers = client.GetAsync("users").Result;
+            HttpResponseMessage responseUsers = Client.GetAsync(usersEndpoint).Result;
             Assert.IsTrue(responseUsers.IsSuccessStatusCode, $"Current status code is {responseUsers.StatusCode.ToString()}");
 
             List<UsersModel> parsedUsersResponse = JsonConvert.DeserializeObject<List<UsersModel>>(responseUsers.Content.ReadAsStringAsync().Result);
@@ -34,7 +32,7 @@ namespace PortalTask.Tests
             todosUserId1 = parsedUsersResponse.FirstOrDefault(u => u.Name.Equals(usersName1)).Id;
 
             //getting the response for albums that "todosUserId1' has
-            HttpResponseMessage responseTODOs1 = client.GetAsync($"todos/?userId={todosUserId1}").Result;
+            HttpResponseMessage responseTODOs1 = Client.GetAsync($"{todosEndpoint}/?userId={todosUserId1}").Result;
             Assert.IsTrue(responseTODOs1.IsSuccessStatusCode, $"Current status code is {responseTODOs1.StatusCode.ToString()}");
 
             List<TODOsModel> parsedTODOsResponse1 = JsonConvert.DeserializeObject<List<TODOsModel>>(responseTODOs1.Content.ReadAsStringAsync().Result);
@@ -44,7 +42,7 @@ namespace PortalTask.Tests
             todosUserId2 = parsedUsersResponse.FirstOrDefault(u => u.Name.Equals(usersName2)).Id;
 
             //getting the response for albums that "todosUserId1' has
-            HttpResponseMessage responseTODOs2 = client.GetAsync($"todos/?userId={todosUserId2}").Result;
+            HttpResponseMessage responseTODOs2 = Client.GetAsync($"{todosEndpoint}/?userId={todosUserId2}").Result;
             Assert.IsTrue(responseTODOs1.IsSuccessStatusCode, $"Current status code is {responseTODOs1.StatusCode.ToString()}");
 
             List<TODOsModel> parsedTODOsResponse2 = JsonConvert.DeserializeObject<List<TODOsModel>>(responseTODOs2.Content.ReadAsStringAsync().Result);

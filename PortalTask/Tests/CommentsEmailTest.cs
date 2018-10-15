@@ -16,9 +16,7 @@ namespace PortalTask.Tests
 
         public override void Run()
         {
-            var client = new HttpClient { BaseAddress = new Uri(BaseUlr) };
-
-            HttpResponseMessage response = client.GetAsync("comments").Result;
+            HttpResponseMessage response = Client.GetAsync(commentsEndpoint).Result;
             Assert.IsTrue(response.IsSuccessStatusCode, $"Current status code is {response.StatusCode.ToString()}");
 
             List <CommentsModel> parsedResponse = JsonConvert.DeserializeObject<List<CommentsModel>>(response.Content.ReadAsStringAsync().Result);

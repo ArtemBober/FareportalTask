@@ -10,7 +10,7 @@ namespace PortalTask.Suites
     {
         [Test]
         [Parallelizable]
-        public void AddingPostTest() => RunTest<AddingPostTest>();
+        public void AddingPostsTest() => RunTest<AddingPostTest>();
 
         [Test]
         [Parallelizable]

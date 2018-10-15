@@ -18,16 +18,15 @@ namespace PortalTask.Tests
         public override void Run()
         {
             int? postsUserId = null;
-            var client = new HttpClient { BaseAddress = new Uri(BaseUlr) };
 
-            HttpResponseMessage responseUsers = client.GetAsync("users").Result;
+            HttpResponseMessage responseUsers = Client.GetAsync(usersEndpoint).Result;
             Assert.IsTrue(responseUsers.IsSuccessStatusCode, $"Current status code is {responseUsers.StatusCode.ToString()}");
 
             List<UsersModel> parsedUsersResponse = JsonConvert.DeserializeObject<List<UsersModel>>(responseUsers.Content.ReadAsStringAsync().Result);
 
             postsUserId = parsedUsersResponse.FirstOrDefault(u => u.Name.Equals(usersName)).Id;
 
-            HttpResponseMessage responsePosts = client.GetAsync("posts").Result;
+            HttpResponseMessage responsePosts = Client.GetAsync(postsEndpoint).Result;
             Assert.IsTrue(responsePosts.IsSuccessStatusCode, $"Current status code is {responsePosts.StatusCode.ToString()}");
 
             List<PostsModel> parsedPostsResponse = JsonConvert.DeserializeObject<List<PostsModel>>(responsePosts.Content.ReadAsStringAsync().Result);

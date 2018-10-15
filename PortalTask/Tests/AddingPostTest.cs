@@ -14,10 +14,10 @@ namespace PortalTask.Tests
         private const int postsUserId = 5;
         private const string postsTitle = "Artem's posting test";
         private const string postsBody = "Artem's posting test body";
+        private const int newlyCreatedPostId = 101;
 
         public override void Run()
         {
-            var client = new HttpClient { BaseAddress = new Uri(BaseUlr) };
             PostsModel request = new PostsModel(postsUserId, postsTitle, postsBody);
 
             string json = JsonConvert.SerializeObject(request, Formatting.Indented, new JsonSerializerSettings
@@ -27,14 +27,14 @@ namespace PortalTask.Tests
             Reporter.LogInfo("Request: " + json);
 
             StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = client.PostAsync("posts", content).Result;
+            HttpResponseMessage response = Client.PostAsync(postsEndpoint, content).Result;
 
             PostsModel parsedResponse = JsonConvert.DeserializeObject<PostsModel>(response.Content.ReadAsStringAsync().Result);
 
             Assert.Multiple(() =>
             {
                 Assert.IsTrue(response.IsSuccessStatusCode, $"Current status code is {response.StatusCode.ToString()}");
-                Assert.AreEqual(101, parsedResponse.Id);
+                Assert.AreEqual(newlyCreatedPostId, parsedResponse.Id);
             });
         }
     }

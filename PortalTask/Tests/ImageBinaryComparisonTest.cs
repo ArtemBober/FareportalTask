@@ -22,11 +22,10 @@ namespace PortalTask.Tests
 
         public override void Run()
         {
-            var client = new HttpClient { BaseAddress = new Uri(BaseUlr) };
             var webClient = new WebClient();
 
             //geting url for photo from response for relevant "photoId"
-            HttpResponseMessage responsePhotos = client.GetAsync("photos").Result;
+            HttpResponseMessage responsePhotos = Client.GetAsync(photosEndpoint).Result;
             Assert.IsTrue(responsePhotos.IsSuccessStatusCode, $"Current status code is {responsePhotos.StatusCode.ToString()}");
 
             List<PhotosModel> parsedPhotosResponse = JsonConvert.DeserializeObject<List<PhotosModel>>(responsePhotos.Content.ReadAsStringAsync().Result);

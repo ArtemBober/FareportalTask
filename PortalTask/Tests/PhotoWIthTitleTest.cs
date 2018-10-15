@@ -19,10 +19,8 @@ namespace PortalTask.Tests
         {
             int? albumUserId = null;
 
-            var client = new HttpClient { BaseAddress = new Uri(BaseUlr) };
-
             //getting the "albumUserId' that corresponds to 'id' in Users request
-            HttpResponseMessage responseUsers = client.GetAsync("users").Result;
+            HttpResponseMessage responseUsers = Client.GetAsync(usersEndpoint).Result;
             Assert.IsTrue(responseUsers.IsSuccessStatusCode, $"Current status code is {responseUsers.StatusCode.ToString()}");
 
             List<UsersModel> parsedUsersResponse = JsonConvert.DeserializeObject<List<UsersModel>>(responseUsers.Content.ReadAsStringAsync().Result);
@@ -30,13 +28,13 @@ namespace PortalTask.Tests
             albumUserId = parsedUsersResponse.FirstOrDefault(u => u.Email.Equals(usersEmail)).Id;
 
             //getting the response for albums that "albumUserId' has
-            HttpResponseMessage responseAlbums = client.GetAsync($"albums/?userId={albumUserId}").Result;
+            HttpResponseMessage responseAlbums = Client.GetAsync($"{albumsEndpoint}/?userId={albumUserId}").Result;
             Assert.IsTrue(responseAlbums.IsSuccessStatusCode, $"Current status code is {responseAlbums.StatusCode.ToString()}");
 
             List<AlbumsModel> parsedAlbumsResponse = JsonConvert.DeserializeObject<List<AlbumsModel>>(responseAlbums.Content.ReadAsStringAsync().Result);
 
             //getting response for Photos and evaluate the given results
-            HttpResponseMessage responsePhotos = client.GetAsync("photos").Result;
+            HttpResponseMessage responsePhotos = Client.GetAsync(photosEndpoint).Result;
             Assert.IsTrue(responsePhotos.IsSuccessStatusCode, $"Current status code is {responsePhotos.StatusCode.ToString()}");
 
             List<PhotosModel> parsedPhotosResponse = JsonConvert.DeserializeObject<List<PhotosModel>>(responsePhotos.Content.ReadAsStringAsync().Result);

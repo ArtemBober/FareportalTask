@@ -11,15 +11,14 @@ namespace PortalTask.Tests
 {
     class UpdatingPostTest : BaseTest
     {
-        private readonly string requestTitle = "Artem's update test";
-        private readonly string requestBody = "Artem's update body";
-
+        private const string requestTitle = "Artem's update test";
+        private const string requestBody = "Artem's update body";
+        private const int updatingPostId = 2;
+        private const int updatingUserId = 6;
 
         public override void Run()
         {
-            var client = new HttpClient { BaseAddress = new Uri(BaseUlr) };
-
-            PostsModel request = new PostsModel(6, requestTitle, requestBody);
+            PostsModel request = new PostsModel(updatingUserId, requestTitle, requestBody);
 
             string json = JsonConvert.SerializeObject(request, Formatting.Indented, new JsonSerializerSettings
             {
@@ -30,7 +29,7 @@ namespace PortalTask.Tests
 
             StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = client.PutAsync("posts/2", content).Result;
+            HttpResponseMessage response = Client.PutAsync($"{postsEndpoint}/{updatingPostId}", content).Result;
 
             PostsModel parsedResponse = JsonConvert.DeserializeObject<PostsModel>(response.Content.ReadAsStringAsync().Result);
 
@@ -38,8 +37,8 @@ namespace PortalTask.Tests
             Assert.Multiple(() =>
             {
                 Assert.IsTrue(response.IsSuccessStatusCode, $"Current status code is {response.StatusCode.ToString()}");
-                Assert.AreEqual(2, parsedResponse.Id);
-                Assert.AreEqual(6, parsedResponse.UserId);
+                Assert.AreEqual(updatingPostId, parsedResponse.Id);
+                Assert.AreEqual(updatingUserId, parsedResponse.UserId);
                 Assert.AreEqual(requestBody, parsedResponse.Body);
                 Assert.AreEqual(requestTitle, parsedResponse.Title);
             });
