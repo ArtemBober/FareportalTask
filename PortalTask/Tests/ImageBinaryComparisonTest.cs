@@ -25,7 +25,7 @@ namespace PortalTask.Tests
             var client = new HttpClient { BaseAddress = new Uri(BaseUlr) };
             var webClient = new WebClient();
 
-            //geting url for photo from response for relevant photoId
+            //geting url for photo from response for relevant "photoId"
             HttpResponseMessage responsePhotos = client.GetAsync("photos").Result;
             Assert.IsTrue(responsePhotos.IsSuccessStatusCode, $"Current status code is {responsePhotos.StatusCode.ToString()}");
 
